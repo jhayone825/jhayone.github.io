@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aviator‑Style Crash Game — Full</title>
+  <style>
+    :root{--bg:#0f1220;--panel:#171a2b;--muted:#8b93b2;--text:#e7ebff;--accent:#7c5cff;--danger:#ff4d6d;--success:#2dd4bf}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial;color:var(--text);background:radial-gradient(800px 400px at 10% -10%, #21183f 0%, #0f1220 45%);-webkit-font-smoothing:antialiased}
+    .wrap{max-width:1100px;margin:20px auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .title{font-weight:800;font-size:clamp(18px,3vw,26px)}
+    .balance{background:var(--panel);padding:10px 14px;border-radius:14px;display:flex;gap:10px;align-items:center}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);border:1px solid rgba(255,255,255,.04);border-radius:16px;padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+
+    /* Arena */
+    .arena{position:relative;height:460px;overflow:hidden;border-radius:14px}
+    .sky{position:absolute;inset:0;background:linear-gradient(180deg,#12203a 0%, #0f1220 60%);animation:skyshift 18s ease-in-out infinite alternate}
+    @keyframes skyshift{0%{background:linear-gradient(180deg,#12203a 0%, #0f1220 60%)}100%{background:linear-gradient(180deg,#2b1b61 0%, #0f1220 60%)}}
+    .cloud{position:absolute;font-size:56px;opacity:.35}
+    .cloud.c2{font-size:72px;opacity:.25}
+    .cloud.c3{font-size:40px;opacity:.3}
+    .gridlines{position:absolute;inset:0;background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);background-size:40px 40px;opacity:.12}
+    .ground{position:absolute;left:-10%;right:-10%;bottom:-120px;height:220px;background:radial-gradient(60% 80% at 50% 20%, rgba(255,255,255,.03), rgba(0,0,0,0) 70%),linear-gradient(to bottom,#0d111f 0%, #090c18 100%);border-top:1px solid rgba(255,255,255,.04);filter:blur(4px)}
+
+    /* Plane and trail */
+    .plane{position:absolute;width:48px;height:48px;background-image:url('https://cdn-icons-png.flaticon.com/512/684/684908.png');background-size:contain;background-repeat:no-repeat;transform:translate(-50%,-50%) rotate(10deg);filter:drop-shadow(0 12px 18px rgba(0,0,0,.6));transition:transform .08s linear}
+    .trail{position:absolute;width:4px;border-radius:4px;background:linear-gradient(to bottom, rgba(124,92,255,.95), rgba(45,212,191,.06));box-shadow:0 0 12px rgba(124,92,255,.7)}
+    .boom{position:absolute;font-size:40px;transform:translate(-50%,-50%);display:none}
+
+    .hud{position:absolute;left:14px;top:14px;display:flex;gap:10px;align-items:center}
+    .badge{background:rgba(0,0,0,.45);padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.04);font-weight:700}
+    .badge.m{font-size:28px;transition:transform .12s ease}
+    .badge.stat{font-size:12px;color:var(--muted)}
+
+    /* Controls */
+    .controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:560px){.controls{grid-template-columns:1fr}}
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    input[type=number],input[type=text]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);color:var(--text)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .btn{padding:12px;border-radius:12px;border:none;font-weight:800;cursor:pointer}
+    .btn.primary{background:linear-gradient(180deg,var(--accent),#5e45e6);color:white}
+    .btn.danger{background:linear-gradient(180deg,var(--danger),#ff6b88);color:white}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+
+    .history{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.04);font-weight:700}
+    .chip.good{color:var(--success);border-color:rgba(45,212,191,.25)}
+    .chip.bad{color:var(--danger);border-color:rgba(255,77,109,.25)}
+
+    .note{font-size:13px;color:var(--muted);margin-top:12px}
+
+    /* popup */
+    .popup{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:18px 22px;border-radius:14px;background:rgba(0,0,0,.7);font-weight:900;display:none;z-index:40}
+    .popup.good{color:var(--success)}.popup.bad{color:var(--danger)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">✈️ Aviator‑Style Crash — Full</div>
+      <div class="balance">Balance: <strong id="balance">1000.00</strong></div>
+    </header>
+
+    <div class="grid">
+      <section class="card arena">
+        <div class="sky"></div>
+        <div class="cloud c1" style="left:-220px;top:12%">☁️</div>
+        <div class="cloud c2" style="left:-300px;top:38%">☁️</div>
+        <div class="cloud c3" style="left:-150px;top:70%">☁️</div>
+        <div class="gridlines"></div>
+
+        <div class="hud">
+          <div class="badge">Round <span id="round">1</span></div>
+          <div class="badge m" id="multiplier">1.00×</div>
+          <div class="badge stat" id="status">Place your bet</div>
+        </div>
+
+        <div id="plane" class="plane" style="left:40px;bottom:40px"></div>
+        <div id="trail" class="trail" style="left:40px;bottom:40px;height:0px"></div>
+        <div id="boom" class="boom">💥</div>
+        <div id="popup" class="popup"></div>
+
+        <div class="ground"></div>
+      </section>
+
+      <section class="card">
+        <div class="controls">
+          <div>
+            <label for="bet">Bet Amount</label>
+            <input id="bet" type="number" min="1" step="1" value="50" />
+          </div>
+          <div>
+            <label for="autoCash">Auto Cash Out (×)</label>
+            <input id="autoCash" type="number" min="1.01" step="0.01" placeholder="e.g. 2.00" />
+          </div>
+
+          <div class="row">
+            <button id="startBtn" class="btn primary">Start Round</button>
+            <button id="cashBtn" class="btn danger" disabled>Cash Out</button>
+          </div>
+
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label for="seed">Seed (optional)</label>
+              <input id="seed" type="text" placeholder="any text" />
+            </div>
+            <div>
+              <label for="edge">House Edge %</label>
+              <input id="edge" type="number" min="0" max="10" step="0.1" value="1" />
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px">
+          <strong>Previous Crashes</strong>
+          <div id="history" class="history"></div>
+        </div>
+
+        <p class="note">Controls: <b>Enter</b> to start, <b>Space</b> to cash out. Demo only — no real money.</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ====== RNG (seeded optional) ======
+    function xmur3(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return function(){h=Math.imul(h^(h>>>16),2246822507);h=Math.imul(h^(h>>>13),3266489909);return (h^(h>>>16))>>>0;}}
+    function mulberry32(a){return function(){let t=a+=0x6D2B79F5;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;}}
+    function makeRNG(seedText){ if(!seedText) return Math.random; const seedFn=xmur3(seedText); return mulberry32(seedFn()); }
+
+    // ====== State ======
+    let rng = Math.random;
+    let balance = 1000;
+    let round = 1;
+    let inRound=false, crashed=false, cashed=false;
+    let betAmount=0, startTime=0, crashPoint=2, cashOutAt=null, rafId=null, currentMultiplier=1;
+    const speed = 0.35; // growth speed
+
+    // ====== Elements ======
+    const els = {
+      balance: document.getElementById('balance'),
+      round: document.getElementById('round'),
+      multiplier: document.getElementById('multiplier'),
+      status: document.getElementById('status'),
+      plane: document.getElementById('plane'),
+      trail: document.getElementById('trail'),
+      boom: document.getElementById('boom'),
+      history: document.getElementById('history'),
+      bet: document.getElementById('bet'),
+      autoCash: document.getElementById('autoCash'),
+      start: document.getElementById('startBtn'),
+      cash: document.getElementById('cashBtn'),
+      seed: document.getElementById('seed'),
+      edge: document.getElementById('edge'),
+      popup: document.getElementById('popup')
+    };
+
+    // ====== Helpers ======
+    function fmt(n){ return Number(n).toFixed(2); }
+    function fmtMult(m){ return m.toFixed(2) + '×'; }
+
+    function drawCrashPoint(){
+      const edgePct = Math.max(0, Math.min(10, parseFloat(els.edge.value||'0')));
+      const edge = 1 - (edgePct/100);
+      const r = rng();
+      // slightly heavier tail but tuned for playable rounds
+      let m = Math.pow(1 / (1 - Math.max(1e-12, r)), 1.12);
+      m = Math.max(1.05, m * edge);
+      return m;
+    }
+
+    function setStatus(text, cls){ els.status.textContent = text; els.status.classList.remove('good','bad'); if(cls) els.status.classList.add(cls); }
+
+    function resetArena(){ els.plane.style.display='block'; els.boom.style.display='none'; els.trail.style.height='0px'; els.plane.style.left='40px'; els.plane.style.bottom='40px'; els.trail.style.left='40px'; els.trail.style.bottom='40px'; }
+
+    function pushHistory(val){ const chip = document.createElement('div'); chip.className = 'chip ' + (val >= 2 ? 'good':'bad'); chip.textContent = val.toFixed(2) + '×'; chip.title = 'Click to copy ' + chip.textContent; chip.onclick = () => { navigator.clipboard?.writeText(val.toFixed(2)); }; els.history.prepend(chip); }
+
+    function showPopup(msg, good){ els.popup.textContent = msg; els.popup.className = 'popup ' + (good ? 'good' : 'bad'); els.popup.style.display = 'block'; setTimeout(()=>{ els.popup.style.display = 'none'; }, 1400); }
+
+    // ====== Round Logic ======
+    function startRound(){ if(inRound) return; betAmount = Math.max(1, Math.floor(parseFloat(els.bet.value||'0'))); if(betAmount > balance){ setStatus('Insufficient balance','bad'); return; }
+      // set RNG from seed
+      rng = makeRNG(els.seed.value.trim());
+      balance -= betAmount; els.balance.textContent = fmt(balance);
+      crashPoint = drawCrashPoint(); cashed=false; crashed=false; cashOutAt=null; inRound=true; startTime = performance.now(); els.multiplier.textContent = '1.00×'; setStatus('Flying…');
+      els.start.disabled = true; els.cash.disabled = false; els.bet.disabled = true; els.autoCash.disabled = true; els.seed.disabled = true; els.edge.disabled = true;
+      resetArena(); rafId = requestAnimationFrame(tick);
+    }
+
+    function cashOut(){ if(!inRound || crashed || cashed) return; cashed = true; cashOutAt = currentMultiplier; const win = betAmount * cashOutAt; balance += win; els.balance.textContent = fmt(balance); setStatus('Cashed at ' + fmtMult(cashOutAt) + ' +'+fmt(win),'good'); els.cash.disabled = true; showPopup('YOU WON +'+fmt(win), true); }
+
+    function tick(now){ if(!inRound){ cancelAnimationFrame(rafId); return; }
+      const t = (now - startTime) / 1000;
+      currentMultiplier = Math.max(1.0, Math.exp(speed * t));
+      els.multiplier.textContent = fmtMult(currentMultiplier);
+      // subtle multiplier pulse
+      els.multiplier.style.transform = 'scale(' + (1 + Math.sin(now/220)/20) + ')';
+
+      // plane path
+      const arena = document.querySelector('.arena');
+      const w = arena.clientWidth, h = arena.clientHeight;
+      const maxPath = Math.min(1, Math.log10(Math.max(1.01, currentMultiplier))/3);
+      const x = 40 + maxPath * (w - 80);
+      const y = 40 + Math.pow(maxPath, 1.2) * (h - 140);
+      els.plane.style.left = x + 'px'; els.plane.style.bottom = y + 'px'; els.trail.style.left = x + 'px'; els.trail.style.bottom = y + 'px'; els.trail.style.height = Math.max(0, y-40) + 'px';
+
+      // auto cash
+      const auto = parseFloat(els.autoCash.value || '0');
+      if(!isNaN(auto) && auto >= 1.01 && !cashed && currentMultiplier >= auto){ cashOut(); }
+
+      // crash check
+      if(currentMultiplier >= crashPoint){ crashed = true; inRound = false; pushHistory(crashPoint);
+        // explosion
+        els.plane.style.display = 'none'; els.boom.style.display = 'block'; els.boom.style.left = x + 'px'; els.boom.style.bottom = y + 'px'; els.multiplier.textContent = fmtMult(crashPoint);
+        if(!cashed){ setStatus('Crash at ' + fmtMult(crashPoint) + ' −' + fmt(betAmount), 'bad'); showPopup('CRASHED', false); }
+        else{ setStatus('Crash at ' + fmtMult(crashPoint) + ' (you out at ' + fmtMult(cashOutAt) + ')', 'good'); }
+
+        setTimeout(()=>{ round++; els.round.textContent = String(round); els.start.disabled = false; els.cash.disabled = true; els.bet.disabled = false; els.autoCash.disabled = false; els.seed.disabled = false; els.edge.disabled = false; els.plane.style.display='block'; els.boom.style.display='none'; }, 1200);
+        cancelAnimationFrame(rafId); return;
+      }
+
+      rafId = requestAnimationFrame(tick);
+    }
+
+    // ====== UI Wiring ======
+    els.start.addEventListener('click', startRound);
+    els.cash.addEventListener('click', cashOut);
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ startRound(); } if(e.code==='Space'){ e.preventDefault(); cashOut(); } });
+    els.balance.textContent = fmt(balance);
+    setStatus('Place your bet');
+
+    // Clouds animation (JS-driven to ensure smooth movement across arena)
+    (function animateClouds(){ const cs = document.querySelectorAll('.cloud'); let last = performance.now(); function step(now){ const dt = (now-last)/1000; last = now; cs.forEach((c,i)=>{ const speed = 20 + i*6; let left = parseFloat(c.style.left || '-200px'); left += speed * dt; if(left > document.querySelector('.arena').clientWidth + 200) left = -300; c.style.left = left + 'px'; }); requestAnimationFrame(step); } requestAnimationFrame(step); })();
+
+  </script>
+</body>
+</html>
