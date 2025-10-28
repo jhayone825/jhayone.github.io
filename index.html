@@ -45,6 +45,7 @@ p { color: gray; margin-bottom:1rem; }
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 .grid {
   display: grid;
@@ -76,12 +77,12 @@ p { color: gray; margin-bottom:1rem; }
   transition: transform 0.2s;
 }
 .card button:active { transform: scale(1.1); }
-footer { text-align:center; padding:1rem; color:gray; font-size:0.9rem; }
+footer { text-align:center; padding:1rem; color:gray; font-size:0.9rem; text-align:center; }
 </style>
 </head>
 <body data-theme="dark">
 <header>
-  <img src="https://i.imgur.com/k1L2bVv.png" alt="Jhayone">
+  <img src="https://jhayone825.github.io/images/jhayone.jpg" alt="Jhayone">
   <h1>Jhayone</h1>
   <p>I buy and sell all kinds of gift cards, edit media, and offer fast pickup via banks.</p>
   <button class="toggle-btn" onclick="toggleTheme()">🌙 Toggle Mode</button>
@@ -89,79 +90,76 @@ footer { text-align:center; padding:1rem; color:gray; font-size:0.9rem; }
 
 <section class="grid">
   <div class="card">
-    <img src="https://i.imgur.com/Qv5wZsO.png" alt="iTunes">
+    <img src="https://jhayone825.github.io/images/itunes.png" alt="iTunes">
     <h3>iTunes Gift Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/p0n6FHZ.png" alt="Amazon">
+    <img src="https://jhayone825.github.io/images/amazon.png" alt="Amazon">
     <h3>Amazon Gift Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/ZlPGEfF.png" alt="Google Play">
+    <img src="https://jhayone825.github.io/images/googleplay.png" alt="Google Play">
     <h3>Google Play Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/W5u3lFx.png" alt="Steam">
+    <img src="https://jhayone825.github.io/images/steam.png" alt="Steam">
     <h3>Steam Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/LyM80Na.png" alt="eBay">
+    <img src="https://jhayone825.github.io/images/ebay.png" alt="eBay">
     <h3>eBay Gift Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/0GBr1sl.png" alt="Sephora">
+    <img src="https://jhayone825.github.io/images/sephora.png" alt="Sephora">
     <h3>Sephora Gift Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/y6K0ZRM.png" alt="Walmart">
+    <img src="https://jhayone825.github.io/images/walmart.png" alt="Walmart">
     <h3>Walmart Gift Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/f0rD0tL.png" alt="Apple Store">
+    <img src="https://jhayone825.github.io/images/applestore.png" alt="Apple Store">
     <h3>Apple Store Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/x5X95Jv.png" alt="Xbox">
+    <img src="https://jhayone825.github.io/images/xbox.png" alt="Xbox">
     <h3>Xbox Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
   <div class="card">
-    <img src="https://i.imgur.com/5QZrZqS.png" alt="PlayStation">
+    <img src="https://jhayone825.github.io/images/playstation.png" alt="PlayStation">
     <h3>PlayStation Card</h3>
     <button onclick="buyNow()">Buy Now</button>
   </div>
 </section>
 
 <footer>
-  © 2025 Jhayone | <a href="https://wa.me/2347073784133" style="color:var(--accent);text-decoration:none;">Chat on WhatsApp</a>
+  © 2025 Jhayone | <a href="https://wa.me/07073784133" style="color:var(--accent);text-decoration:none;">Chat on WhatsApp</a>
 </footer>
 
-<!-- Confetti JS -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-function toggleTheme() {
-  const body = document.body;
-  const current = body.getAttribute("data-theme");
-  body.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+function toggleTheme(){
+  const body=document.body;
+  const current=body.getAttribute("data-theme");
+  body.setAttribute("data-theme",current==="dark"?"light":"dark");
 }
 
-function buyNow() {
-  // Confetti surprise
-  confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 }});
-  // Bounce animation for button
-  event.target.style.transform = "scale(1.2)";
-  setTimeout(() => { event.target.style.transform = "scale(1)"; }, 200);
-  // Open WhatsApp
-  window.open("https://wa.me/2347073784133", "_blank");
+function buyNow(){
+  confetti({particleCount:50,spread:70,origin:{y:0.6}});
+  event.target.style.transform="scale(1.2)";
+  setTimeout(()=>{event.target.style.transform="scale(1)";},200);
+  window.open("https://wa.me/07073784133","_blank");
 }
 </script>
 </body>
 </html>
+
