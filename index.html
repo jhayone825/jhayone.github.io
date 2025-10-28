@@ -1,230 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jhayone | Gift Card Trader</title>
-  <style>
-    :root {
-      --bg: #ffffff;
-      --text: #111111;
-      --card: #f4f4f4;
-      --accent: #007bff;
-    }
-    [data-theme="dark"] {
-      --bg: #0d1117;
-      --text: #ffffff;
-      --card: #161b22;
-      --accent: #1f6feb;
-    }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: 0.3s;
-    }
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1rem;
-    }
-    header img {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      border: 3px solid var(--accent);
-    }
-    h1 {
-      margin: 0.5rem 0 0;
-      font-size: 1.8rem;
-    }
-    p {
-      color: gray;
-      margin-bottom: 1rem;
-    }
-    .toggle-btn {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-    /* Grid & Cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      padding: 1rem;
-      max-width: 1000px;
-      margin: auto;
-    }
-    .card {
-      background: var(--card);
-      border-radius: 12px;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: 0.3s;
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    .card.show {
-      opacity: 1;
-      transform: translateY(0);
-      transition: 0.5s ease-out;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-    }
-    .card img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      margin-bottom: 0.5rem;
-    }
-    .card button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 500;
-      margin-top: 0.5rem;
-      transition: 0.3s;
-    }
-    .card button:hover {
-      transform: translateY(-3px);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jhayone | Gift Card Trader</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --card: #f4f4f4;
+  --accent: #007bff;
+}
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --text: #ffffff;
+  --card: #161b22;
+  --accent: #1f6feb;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: 0.3s;
+}
+header {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+}
+header img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+}
+h1 {
+  margin: 0.5rem 0 0;
+  font-size: 1.8rem;
+}
+p {
+  color: gray;
+  margin-bottom: 1rem;
+}
+.toggle-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 
-    /* Bank card glow animation */
-    .bank-card {
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 10px rgba(31,111,235,0.5);
-      animation: pulseGlow 2s infinite alternate;
-    }
-    @keyframes pulseGlow {
-      0% {
-        box-shadow: 0 0 10px rgba(31,111,235,0.5), 0 0 20px rgba(31,111,235,0.3);
-      }
-      50% {
-        box-shadow: 0 0 20px rgba(31,111,235,0.8), 0 0 30px rgba(31,111,235,0.5);
-      }
-      100% {
-        box-shadow: 0 0 10px rgba(31,111,235,0.5), 0 0 20px rgba(31,111,235,0.3);
-      }
-    }
+/* Grid & Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1000px;
+  margin: auto;
+  perspective: 1000px;
+}
 
-    footer {
-      text-align: center;
-      padding: 1rem;
-      color: gray;
-      font-size: 0.9rem;
-    }
-  </style>
+/* Card flip effect */
+.card {
+  width: 100%;
+  height: 250px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 0.5s ease-out;
+}
+.card:hover {
+  transform: translateY(-5px) rotateY(180deg);
+}
+
+/* Card faces */
+.card .front, .card .back {
+  position: absolute;
+  width: 100%;
+  height: 250px;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background: var(--card);
+}
+.card .front img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+.card .back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+.card button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  transition: 0.3s;
+}
+.card button:hover {
+  transform: translateY(-3px);
+}
+
+/* Bank card glow */
+.bank-card .front, .bank-card .back {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 10px rgba(31,111,235,0.5);
+  animation: pulseGlow 2s infinite alternate;
+}
+@keyframes pulseGlow {
+  0% { box-shadow:0 0 10px rgba(31,111,235,0.5),0 0 20px rgba(31,111,235,0.3);}
+  50% { box-shadow:0 0 20px rgba(31,111,235,0.8),0 0 30px rgba(31,111,235,0.5);}
+  100% { box-shadow:0 0 10px rgba(31,111,235,0.5),0 0 20px rgba(31,111,235,0.3);}
+}
+
+/* Glow buttons */
+button {
+  position: relative;
+  z-index: 1;
+}
+button::before {
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  border-radius:6px;
+  background: linear-gradient(45deg, #1f6feb, #00f, #1f6feb);
+  filter: blur(8px);
+  opacity:0.7;
+  z-index:-1;
+  transition: opacity 0.3s;
+  animation: glowPulse 2s infinite alternate;
+}
+@keyframes glowPulse {
+  0% { opacity:0.5; }
+  100% { opacity:1; }
+}
+
+footer { text-align:center; padding:1rem; color:gray; font-size:0.9rem; }
+
+</style>
 </head>
 <body data-theme="dark">
-  <header>
-    <img src="jhayone.jpg" alt="Jhayone">
-    <h1>Jhayone</h1>
-    <p>I buy and sell and redeem all kinds of gift cards, edit media, and offer fast pickup via banks.</p>
-    <button class="toggle-btn" onclick="toggleTheme()">🌙 Toggle Mode</button>
-  </header>
+<header>
+  <img src="jhayone.jpg" alt="Jhayone">
+  <h1>Jhayone</h1>
+  <p>I buy and sell and redeem all kinds of gift cards, edit media, and offer fast pickup via banks.</p>
+  <button class="toggle-btn" onclick="toggleTheme()">🌙 Toggle Mode</button>
+</header>
 
-  <section class="grid">
-    <div class="card">
+<section class="grid">
+  <!-- iTunes Card -->
+  <div class="card">
+    <div class="front">
       <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Itunes_logo.svg" alt="iTunes">
       <h3>iTunes Gift Card</h3>
       <button onclick="openWA()">Redeem Now</button>
     </div>
+    <div class="back">
+      <p>Get your iTunes card instantly!</p>
+      <button onclick="openWA()">Redeem Now</button>
+    </div>
+  </div>
 
-    <!-- Bank / Payment Showcase Card -->
-    <div class="card bank-card">
+  <!-- Bank Showcase -->
+  <div class="card bank-card">
+    <div class="front">
       <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Bank_icon.svg" alt="Banks">
       <h3>Bank / Payment Showcase</h3>
-      <p>Available: Cash App, PayPal, Zelle, Venmo, All Major Banks</p>
+      <p>Cash App, PayPal, Zelle, Venmo, All Banks</p>
       <button onclick="openBank()">Click — Bank Available</button>
     </div>
+    <div class="back">
+      <p>Contact us to redeem via any bank/payment!</p>
+      <button onclick="openBank()">Click — Bank Available</button>
+    </div>
+  </div>
 
-    <div class="card">
+  <!-- Amazon Card -->
+  <div class="card">
+    <div class="front">
       <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
       <h3>Amazon Gift Card</h3>
       <button onclick="openWA()">Redeem Now</button>
     </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg" alt="Google Play">
-      <h3>Google Play Card</h3>
+    <div class="back">
+      <p>Instant Amazon gift card redemption!</p>
       <button onclick="openWA()">Redeem Now</button>
     </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" alt="Steam">
-      <h3>Steam Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/Ebay_logo.svg" alt="eBay">
-      <h3>eBay Gift Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Sephora_logo.svg" alt="Sephora">
-      <h3>Sephora Gift Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg" alt="Walmart">
-      <h3>Walmart Gift Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Store">
-      <h3>Apple Store Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Xbox_logo_2012.svg" alt="Xbox">
-      <h3>Xbox Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-    <div class="card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/PlayStation_logo.svg" alt="PlayStation">
-      <h3>PlayStation Card</h3>
-      <button onclick="openWA()">Redeem Now</button>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <footer>
-    © 2025 Jhayone | <a href="https://wa.me/2347073784133" style="color:var(--accent);text-decoration:none;">Chat on WhatsApp</a>
-  </footer>
+<footer>
+  © 2025 Jhayone | <a href="https://wa.me/2347073784133" style="color:var(--accent);text-decoration:none;">Chat on WhatsApp</a>
+</footer>
 
-  <script>
-    function toggleTheme() {
-      const body = document.body;
-      const current = body.getAttribute("data-theme");
-      body.setAttribute("data-theme", current === "dark" ? "light" : "dark");
-    }
+<!-- Confetti JS -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+function toggleTheme(){
+  const body=document.body;
+  const current=body.getAttribute("data-theme");
+  body.setAttribute("data-theme",current==="dark"?"light":"dark");
+}
+function openWA(){
+  confetti({particleCount:50,spread:70,origin:{y:0.6}});
+  window.open("https://wa.me/2347073784133","_blank");
+}
+function openBank(){
+  confetti({particleCount:50,spread:70,origin:{y:0.6}});
+  window.open("https://wa.me/2347073784133","_blank");
+}
 
-    function openWA() {
-      window.open("https://wa.me/2347073784133", "_blank");
-    }
-
-    function openBank() {
-      window.open("https://wa.me/2347073784133", "_blank"); // Replace with your bank showcase link if any
-    }
-
-    // Animate all cards on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      const cards = document.querySelectorAll('.card');
-      cards.forEach((card, i) => {
-        setTimeout(() => {
-          card.classList.add('show');
-        }, i * 150); // stagger animation for nice effect
-      });
-    });
-  </script>
+// Animate cards
+window.addEventListener('DOMContentLoaded',()=>{
+  const cards=document.querySelectorAll('.card');
+  cards.forEach((card,i)=>{
+    setTimeout(()=>{card.classList.add('show');},i*150);
+  });
+});
+</script>
 </body>
 </html>
