@@ -100,6 +100,25 @@
     .card button:hover {
       transform: translateY(-3px);
     }
+
+    /* Bank card glow animation */
+    .bank-card {
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 10px rgba(31,111,235,0.5);
+      animation: pulseGlow 2s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 10px rgba(31,111,235,0.5), 0 0 20px rgba(31,111,235,0.3);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(31,111,235,0.8), 0 0 30px rgba(31,111,235,0.5);
+      }
+      100% {
+        box-shadow: 0 0 10px rgba(31,111,235,0.5), 0 0 20px rgba(31,111,235,0.3);
+      }
+    }
+
     footer {
       text-align: center;
       padding: 1rem;
@@ -122,12 +141,15 @@
       <h3>iTunes Gift Card</h3>
       <button onclick="openWA()">Redeem Now</button>
     </div>
-    <div class="card">
+
+    <!-- Bank / Payment Showcase Card -->
+    <div class="card bank-card">
       <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/Bank_icon.svg" alt="Banks">
       <h3>Bank / Payment Showcase</h3>
       <p>Available: Cash App, PayPal, Zelle, Venmo, All Major Banks</p>
       <button onclick="openBank()">Click — Bank Available</button>
     </div>
+
     <div class="card">
       <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
       <h3>Amazon Gift Card</h3>
@@ -191,7 +213,7 @@
     }
 
     function openBank() {
-      window.open("https://wa.me/2347073784133", "_blank"); // Or replace with bank showcase page
+      window.open("https://wa.me/2347073784133", "_blank"); // Replace with your bank showcase link if any
     }
 
     // Animate all cards on page load
