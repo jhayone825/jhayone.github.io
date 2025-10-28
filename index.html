@@ -32,15 +32,53 @@ header img {
 }
 h1 { margin: 0.5rem 0 0; font-size: 1.8rem; }
 p { color: gray; margin-bottom: 1rem; }
+
+/* Animated Toggle Button */
 .toggle-btn {
   background: var(--accent);
   color: #fff;
   border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: 20px;
+  border-radius: 50px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
+/* Hover animation */
+.toggle-btn:hover {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  background: #ff6a00;
+}
+
+/* Click animation */
+.toggle-btn:active {
+  transform: scale(0.9) rotate(10deg);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* Glow animation */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px var(--accent); }
+  50% { box-shadow: 0 0 20px var(--accent); }
+}
+.toggle-btn.glow {
+  animation: glow 1.5s infinite;
+}
+
+/* Emoji flip */
+.emoji {
+  display: inline-block;
+  transition: transform 0.6s ease;
+}
+
+/* Grid for cards */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -49,6 +87,8 @@ p { color: gray; margin-bottom: 1rem; }
   max-width: 1000px;
   margin: auto;
 }
+
+/* Flip cards */
 .card { perspective: 1000px; }
 .card-inner {
   position: relative;
@@ -95,6 +135,7 @@ p { color: gray; margin-bottom: 1rem; }
   cursor: pointer;
   font-weight: 500;
 }
+
 footer { text-align: center; padding: 1rem; color: gray; font-size: 0.9rem; }
 </style>
 </head>
@@ -103,7 +144,9 @@ footer { text-align: center; padding: 1rem; color: gray; font-size: 0.9rem; }
   <img src="jhayone.jpg" alt="Jhayone">
   <h1>Jhayone</h1>
   <p>I buy and sell all kinds of gift cards, edit media, and offer fast pickup via banks.</p>
-  <button class="toggle-btn" onclick="toggleTheme()">🌙 Toggle Mode</button>
+  <button class="toggle-btn glow" onclick="toggleTheme()">
+    <span class="emoji" id="theme-emoji">🌙</span> Toggle Mode
+  </button>
 </header>
 
 <section class="grid">
@@ -255,8 +298,17 @@ footer { text-align: center; padding: 1rem; color: gray; font-size: 0.9rem; }
 <script>
 function toggleTheme() {
   const body = document.body;
+  const emoji = document.getElementById('theme-emoji');
   const current = body.getAttribute("data-theme");
-  body.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+  if(current === "dark") {
+    body.setAttribute("data-theme", "light");
+    emoji.style.transform = "rotateY(180deg)";
+    emoji.textContent = "☀️";
+  } else {
+    body.setAttribute("data-theme", "dark");
+    emoji.style.transform = "rotateY(180deg)";
+    emoji.textContent = "🌙";
+  }
 }
 function openWA() {
   window.open("https://wa.me/2347073784133", "_blank");
