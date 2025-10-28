@@ -5,111 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Jhayone | Gift Card Trader</title>
 <style>
-  :root {
-    --bg: #ffffff;
-    --text: #111111;
-    --accent: #007bff;
-  }
-  [data-theme="dark"] {
-    --bg: #0d1117;
-    --text: #ffffff;
-    --accent: #1f6feb;
-  }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    padding: 0;
-    transition: 0.3s;
-  }
-  header {
-    text-align: center;
-    padding: 2rem 1rem 1rem;
-  }
-  header img {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 3px solid var(--accent);
-  }
-  h1 { margin: 0.5rem 0 0; font-size: 1.8rem; }
-  p { color: gray; margin-bottom: 1rem; }
-  .toggle-btn {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-    max-width: 1000px;
-    margin: auto;
-  }
-  .card {
-    perspective: 1000px;
-  }
-  .card-inner {
-    position: relative;
-    width: 100%;
-    height: 220px;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-    cursor: pointer;
-  }
-  .card:hover .card-inner,
-  .card.flip .card-inner {
-    transform: rotateY(180deg);
-  }
-  .card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    backface-visibility: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-weight: bold;
-    font-size: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  }
-  .card-front {
-    background: linear-gradient(135deg, #ff6a00, #ee0979);
-  }
-  .card-back {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
-    transform: rotateY(180deg);
-  }
-  .card img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin-bottom: 0.5rem;
-  }
-  .card button {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  footer {
-    text-align: center;
-    padding: 1rem;
-    color: gray;
-    font-size: 0.9rem;
-  }
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --accent: #007bff;
+}
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --text: #ffffff;
+  --accent: #1f6feb;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: 0.3s;
+}
+header { text-align: center; padding: 2rem 1rem 1rem; }
+header img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+}
+h1 { margin: 0.5rem 0 0; font-size: 1.8rem; }
+p { color: gray; margin-bottom: 1rem; }
+.toggle-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 1000px;
+  margin: auto;
+}
+.card { perspective: 1000px; }
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.card:hover .card-inner,
+.card.flip .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.card-front { background: linear-gradient(135deg, #ff6a00, #ee0979); }
+.card-back {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  transform: rotateY(180deg);
+}
+.card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+.card button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+footer { text-align: center; padding: 1rem; color: gray; font-size: 0.9rem; }
 </style>
 </head>
 <body data-theme="dark">
@@ -121,7 +107,7 @@
 </header>
 
 <section class="grid">
-  <!-- Example Card with Flip -->
+  <!-- iTunes -->
   <div class="card" onclick="this.classList.toggle('flip')">
     <div class="card-inner">
       <div class="card-front">
@@ -135,6 +121,49 @@
     </div>
   </div>
 
+  <!-- Amazon -->
+  <div class="card" onclick="this.classList.toggle('flip')">
+    <div class="card-inner">
+      <div class="card-front">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon">
+        Amazon Gift Card
+      </div>
+      <div class="card-back">
+        Click to Redeem
+        <button onclick="openWA()">Redeem Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Play -->
+  <div class="card" onclick="this.classList.toggle('flip')">
+    <div class="card-inner">
+      <div class="card-front">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg" alt="Google Play">
+        Google Play Card
+      </div>
+      <div class="card-back">
+        Click to Redeem
+        <button onclick="openWA()">Redeem Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Steam -->
+  <div class="card" onclick="this.classList.toggle('flip')">
+    <div class="card-inner">
+      <div class="card-front">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" alt="Steam">
+        Steam Card
+      </div>
+      <div class="card-back">
+        Click to Redeem
+        <button onclick="openWA()">Redeem Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- eBay -->
   <div class="card" onclick="this.classList.toggle('flip')">
     <div class="card-inner">
       <div class="card-front">
@@ -148,6 +177,7 @@
     </div>
   </div>
 
+  <!-- Sephora -->
   <div class="card" onclick="this.classList.toggle('flip')">
     <div class="card-inner">
       <div class="card-front">
@@ -161,6 +191,7 @@
     </div>
   </div>
 
+  <!-- Walmart -->
   <div class="card" onclick="this.classList.toggle('flip')">
     <div class="card-inner">
       <div class="card-front">
@@ -174,6 +205,21 @@
     </div>
   </div>
 
+  <!-- Apple Store -->
+  <div class="card" onclick="this.classList.toggle('flip')">
+    <div class="card-inner">
+      <div class="card-front">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Store">
+        Apple Store Card
+      </div>
+      <div class="card-back">
+        Click to Redeem
+        <button onclick="openWA()">Redeem Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Xbox -->
   <div class="card" onclick="this.classList.toggle('flip')">
     <div class="card-inner">
       <div class="card-front">
@@ -187,6 +233,7 @@
     </div>
   </div>
 
+  <!-- PlayStation -->
   <div class="card" onclick="this.classList.toggle('flip')">
     <div class="card-inner">
       <div class="card-front">
