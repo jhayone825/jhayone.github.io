@@ -35,14 +35,8 @@ header img {
   border-radius: 50%;
   border: 3px solid var(--accent);
 }
-h1 {
-  margin: 0.5rem 0 0;
-  font-size: 1.8rem;
-}
-p {
-  color: gray;
-  margin-bottom: 1rem;
-}
+h1 {margin: 0.5rem 0 0; font-size: 1.8rem;}
+p {color: gray; margin-bottom: 1rem;}
 .toggle-btn {
   background: var(--accent);
   color: #fff;
@@ -65,10 +59,11 @@ p {
   perspective: 1000px;
 }
 
-/* Card flip effect */
+/* Card flip */
 .card {
   width: 100%;
   height: 250px;
+  position: relative;
   transform-style: preserve-3d;
   transition: transform 0.6s;
   cursor: pointer;
@@ -80,15 +75,15 @@ p {
   transform: translateY(0);
   transition: 0.5s ease-out;
 }
-.card:hover {
-  transform: translateY(-5px) rotateY(180deg);
-}
+.card.flipped { transform: rotateY(180deg); }
 
 /* Card faces */
 .card .front, .card .back {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 250px;
+  height: 100%;
   backface-visibility: hidden;
   border-radius: 12px;
   padding: 1rem;
@@ -96,34 +91,8 @@ p {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   background: var(--card);
 }
-.card .front img {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 0.5rem;
-}
-.card .back {
-  transform: rotateY(180deg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-}
-.card button {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  margin-top: 0.5rem;
-  transition: 0.3s;
-}
-.card button:hover {
-  transform: translateY(-3px);
-}
+.card .front img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 0.5rem; }
+.card .back { transform: rotateY(180deg); display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
 /* Bank card glow */
 .bank-card .front, .bank-card .back {
@@ -138,10 +107,7 @@ p {
 }
 
 /* Glow buttons */
-button {
-  position: relative;
-  z-index: 1;
-}
+button {position: relative; z-index: 1;}
 button::before {
   content:"";
   position:absolute;
@@ -154,10 +120,7 @@ button::before {
   transition: opacity 0.3s;
   animation: glowPulse 2s infinite alternate;
 }
-@keyframes glowPulse {
-  0% { opacity:0.5; }
-  100% { opacity:1; }
-}
+@keyframes glowPulse {0% { opacity:0.5; } 100% { opacity:1; } }
 
 footer { text-align:center; padding:1rem; color:gray; font-size:0.9rem; }
 
@@ -217,7 +180,6 @@ footer { text-align:center; padding:1rem; color:gray; font-size:0.9rem; }
   © 2025 Jhayone | <a href="https://wa.me/2347073784133" style="color:var(--accent);text-decoration:none;">Chat on WhatsApp</a>
 </footer>
 
-<!-- Confetti JS -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
 function toggleTheme(){
@@ -239,6 +201,13 @@ window.addEventListener('DOMContentLoaded',()=>{
   const cards=document.querySelectorAll('.card');
   cards.forEach((card,i)=>{
     setTimeout(()=>{card.classList.add('show');},i*150);
+  });
+});
+
+// Flip on click for mobile
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click', ()=>{
+    card.classList.toggle('flipped');
   });
 });
 </script>
